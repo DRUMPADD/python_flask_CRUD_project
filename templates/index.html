@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CRUD simple</title>
+    <!-- <link rel="stylesheet" href="{{ url_for('static',filename='main.css') }}"> -->
+
+    <link rel="stylesheet" href="https://bootswatch.com/4/sandstone/bootstrap.min.css">
+</head>
+<body>
+    <div class="text-center">
+        <h1>Hola a todos</h1>
+        <h2>Esto es un CRUD</h2>
+        
+        <div class="d-flex justify-content-around">
+            <div class="col-lg-3">
+                <div class="card bg-primary">
+                    <div class="card-header text-white">
+                        <p class="h3">Task form</p>
+                    </div>
+                    <div class="card-body">
+                        <form action="/saveTask" method="POST" id="changeAction">
+                            <input type="number" name="idTask" id="noId" style="display: none;">
+                            <div class="form-group">
+                                <input type="text" id="nombre" name="taskName" placeholder="Task" class="form-control">
+                            </div>
+                            <div class="form-group">
+                                <textarea name="taskDesc" id="description" cols="30" rows="10" class="form-control" placeholder="Description"></textarea>
+                            </div>
+                            <button type="submit" id="nameBtn" class="btn btn-block text-white btn-primary">Save task</button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+
+            <div class="col-lg-5">
+                <table class="table table-bordered">
+                    <thead class="table-dark">
+                        <tr>
+                            <th>ID</th>
+                            <th>Tasks</th>
+                            <th>Description</th>
+                            <th colspan="2">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for task in tasks %}
+                        <tr>
+                            <td class="tId">{{ task[0] }}</td>
+                            <td class="tName">{{ task[1] }}</td>
+                            <td class="tDesc">{{ task[2] }}</td>
+                            <td>
+                                <button class="btn btn-block btn-warning edit">Edit</button>
+                            </td>
+                            <td>
+                                <a href="/deleteTask/{{ task[0] }}" class="btn btn-danger">Delete</a>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+    <script>
+        const btnEdit = document.querySelectorAll('.edit');
+        const noId = document.getElementById('noId');
+        const txtName = document.getElementById('nombre');
+        const txtDesc = document.getElementById('description');
+
+        const tId = document.querySelectorAll('.tId');
+        const tName = document.querySelectorAll('.tName');
+        const tDesc = document.querySelectorAll('.tDesc');
+
+        const changeAct = document.getElementById('changeAction');
+        const actionBtn = document.getElementById('nameBtn');
+        for(let i = 0; i < btnEdit.length; i++) {
+            btnEdit[i].addEventListener('click', (e) => {
+                noId.value = tId[i].innerHTML;
+                txtName.value = tName[i].innerHTML;
+                txtDesc.textContent = tDesc[i].innerHTML;
+                e.preventDefault();
+
+                changeAct.setAttribute('action', '/updateTask');
+                actionBtn.textContent = 'Update task';
+            });
+        }
+    </script>
+</body>
+</html>
